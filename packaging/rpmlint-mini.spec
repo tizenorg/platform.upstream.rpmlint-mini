@@ -10,7 +10,7 @@ BuildRequires:  rpmlint
 #BuildRequires:  checkbashisms
 BuildRequires:  dash
 BuildRequires:  libtool
-BuildRequires:  polkit-default-privs
+#BuildRequires:  polkit-default-privs
 Requires:       cpio
 Summary:        Rpm correctness checker
 License:        GPL-2.0+
