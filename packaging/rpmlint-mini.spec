@@ -32,11 +32,11 @@ Rpmlint is a tool to check common errors on rpm packages. Binary and
 source packages can be checked.
 
 %prep
-%setup -q -n -b 99
-cd desktop-file-utils-0.20
+%setup -q  -b 99
+cd ../desktop-file-utils-0.20
 
 %build
-cd desktop-file-utils-0.20
+cd ../desktop-file-utils-0.20
 %configure
 pushd src
 make desktop-file-validate V=1 DESKTOP_FILE_UTILS_LIBS="%{_libdir}/libglib-2.0.a -lpthread -lrt"
