@@ -19,7 +19,7 @@ Version:        1.3
 Release:        0
 Url:            http://rpmlint.zarb.org/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-Source:         desktop-file-utils-0.20.tar.xz
+Source99:       desktop-file-utils-0.20.tar.xz
 Source100:      rpmlint-deps.txt
 Source101:      rpmlint.wrapper
 Source102:      rpmlint-mini.config
@@ -31,10 +31,11 @@ Rpmlint is a tool to check common errors on rpm packages. Binary and
 source packages can be checked.
 
 %prep
-%setup -q -n desktop-file-utils-0.20
-[[ -r COPYING ]]
+tar xf %{S:99}
+cd desktop-file-utils-0.20
 
 %build
+cd desktop-file-utils-0.20
 %configure
 pushd src
 make desktop-file-validate V=1 DESKTOP_FILE_UTILS_LIBS="%{_libdir}/libglib-2.0.a -lpthread -lrt"
