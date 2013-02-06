@@ -18,13 +18,11 @@ Group:          System/Packages
 Version:        1.3
 Release:        0
 Url:            http://rpmlint.zarb.org/
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source:         %{name}-%{version}.tar.bz2
 Source99:       desktop-file-utils-0.20.tar.xz
 Source100:      rpmlint-deps.txt
 Source101:      rpmlint.wrapper
 Source102:      rpmlint-mini.config
-Source103:      polkit-default-privs.config
 Source1000:     rpmlint-mini.rpmlintrc
 
 %description
@@ -43,6 +41,8 @@ make desktop-file-validate V=1 DESKTOP_FILE_UTILS_LIBS="%{_libdir}/libglib-2.0.a
 popd
 
 %install
+cd ../desktop-file-utils-0.20
+pwd
 # test if the rpmlint works at all
 set +e
 /usr/bin/rpmlint rpmlint
@@ -51,22 +51,22 @@ set -e
 # okay, lets put it together
 mkdir -p $RPM_BUILD_ROOT/opt/testing/share/rpmlint
 install -m 755 -D src/desktop-file-validate $RPM_BUILD_ROOT/opt/testing/bin/desktop-file-validate
-cp -a /bin/dash /usr/bin/checkbashisms $RPM_BUILD_ROOT/opt/testing/bin
 cp -a /usr/share/rpmlint/*.py $RPM_BUILD_ROOT/opt/testing/share/rpmlint
 # install config files
 install -d -m 755 $RPM_BUILD_ROOT/opt/testing/share/rpmlint/mini
-for i in /etc/rpmlint/{rpmgroups,pie,licenses}.config "%{SOURCE103}"; do
+for i in /etc/rpmlint/{rpmgroups,pie}.config; do
   cp $i $RPM_BUILD_ROOT/opt/testing/share/rpmlint/mini
 done
 install -m 644 -D /usr/share/rpmlint/config $RPM_BUILD_ROOT/opt/testing/share/rpmlint/config
 install -m 644 "%{SOURCE102}" $RPM_BUILD_ROOT/opt/testing/share/rpmlint
 # extra data
 install -m 755 -d $RPM_BUILD_ROOT/opt/testing/share/rpmlint/data
-install -m 644 /etc/polkit-default-privs.standard $RPM_BUILD_ROOT/opt/testing/share/rpmlint/data
+#install -m 644 /etc/polkit-default-privs.standard $RPM_BUILD_ROOT/opt/testing/share/rpmlint/data
 install -m 644 -D /usr/include/python%{py_ver}/pyconfig.h $RPM_BUILD_ROOT/opt/testing/include/python%{py_ver}/pyconfig.h
 #
 cd %{py_libdir}
 for f in $(<%{SOURCE100}); do
+  echo $f
   find -path "*/$f" -exec install -D {} $RPM_BUILD_ROOT/opt/testing/%{_lib}/python%{py_ver}/{} \;
 done
 install -m 644 /usr/lib/python%{py_ver}/site-packages/magic.py $RPM_BUILD_ROOT/opt/testing/%{_lib}/python%{py_ver}/site-packages/magic.py
@@ -109,12 +109,8 @@ export PYTHONPATH LD_LIBRARY_PATH
 $RPM_BUILD_ROOT/opt/testing/bin/python -tt -u -O $RPM_BUILD_ROOT/opt/testing/share/rpmlint/rpmlint.pyo --help || exit 1
 echo ".. ok"
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,0755)
 /opt/testing
-%doc COPYING
 
-%changelog
