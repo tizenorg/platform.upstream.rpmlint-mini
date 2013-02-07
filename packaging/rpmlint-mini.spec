@@ -54,7 +54,7 @@ install -m 755 -D src/desktop-file-validate $RPM_BUILD_ROOT/opt/testing/bin/desk
 cp -a /usr/share/rpmlint/*.py $RPM_BUILD_ROOT/opt/testing/share/rpmlint
 # install config files
 install -d -m 755 $RPM_BUILD_ROOT/opt/testing/share/rpmlint/mini
-for i in /etc/rpmlint/{rpmgroups,pie}.config; do
+for i in /etc/rpmlint/{licenses,rpmgroups,pie}.config; do
   cp $i $RPM_BUILD_ROOT/opt/testing/share/rpmlint/mini
 done
 install -m 644 -D /usr/share/rpmlint/config $RPM_BUILD_ROOT/opt/testing/share/rpmlint/config
