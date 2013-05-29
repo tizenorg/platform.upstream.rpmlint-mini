@@ -15,7 +15,7 @@ Requires:       cpio
 Summary:        Rpm correctness checker
 License:        GPL-2.0+
 Group:          System/Packages
-Version:        1.3
+Version:        1.4
 Release:        0
 Url:            http://rpmlint.zarb.org/
 Source:         %{name}-%{version}.tar.bz2
