@@ -28,9 +28,11 @@ Source1000:     rpmlint-mini.rpmlintrc
 %description
 Rpmlint is a tool to check common errors on rpm packages. Binary and
 source packages can be checked.
+Source1001: 	rpmlint-mini.manifest
 
 %prep
 %setup -q  -b 99
+cp %{SOURCE1001} .
 cd ../desktop-file-utils-0.20
 
 %build
@@ -111,6 +113,7 @@ echo ".. ok"
 
 
 %files
+%manifest %{name}.manifest
 %defattr(-,root,root,0755)
 /opt/testing
 
