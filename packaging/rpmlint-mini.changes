@@ -1,3 +1,6 @@
+* Fri Jul 12 2013 Patrick McCarty <patrick.mccarty@linux.intel.com> 27c7fa8
+- Fix the manifest installation
+
 * Wed May 29 2013 Anas Nashif <anas.nashif@intel.com> submit/tizen/20130509.184106@eb8f778
 - Version is 1.4
 

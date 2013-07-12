@@ -24,11 +24,11 @@ Source100:      rpmlint-deps.txt
 Source101:      rpmlint.wrapper
 Source102:      rpmlint-mini.config
 Source1000:     rpmlint-mini.rpmlintrc
+Source1001:     %{name}.manifest
 
 %description
 Rpmlint is a tool to check common errors on rpm packages. Binary and
 source packages can be checked.
-Source1001: 	rpmlint-mini.manifest
 
 %prep
 %setup -q  -b 99
