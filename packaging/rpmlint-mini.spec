@@ -111,6 +111,9 @@ export PYTHONPATH LD_LIBRARY_PATH
 $RPM_BUILD_ROOT/opt/testing/bin/python -tt -u -O $RPM_BUILD_ROOT/opt/testing/share/rpmlint/rpmlint.pyo --help || exit 1
 echo ".. ok"
 
+if [ "x%{_lib}" != "xlib" ] ; then
+    ln -s /opt/testing/%{_lib} $RPM_BUILD_ROOT/opt/testing/lib
+fi
 
 %files
 %manifest %{name}.manifest
