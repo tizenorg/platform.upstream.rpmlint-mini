@@ -15,14 +15,15 @@ Requires:       cpio
 Summary:        Rpm correctness checker
 License:        GPL-2.0+
 Group:          System/Packages
-Version:        1.4
+Version:        1.5
 Release:        0
 Url:            http://rpmlint.zarb.org/
 Source:         %{name}-%{version}.tar.bz2
-Source99:       desktop-file-utils-0.20.tar.xz
+Source99:       desktop-file-utils-0.22.tar.xz
 Source100:      rpmlint-deps.txt
 Source101:      rpmlint.wrapper
 Source102:      rpmlint-mini.config
+Source103:      polkit-default-privs.config
 Source1000:     rpmlint-mini.rpmlintrc
 Source1001:     rpmlint-mini.manifest
 
@@ -33,17 +34,17 @@ source packages can be checked.
 %prep
 %setup -q  -b 99
 cp %{SOURCE1001} .
-cd ../desktop-file-utils-0.20
+cd ../desktop-file-utils-0.22
 
 %build
-cd ../desktop-file-utils-0.20
+cd ../desktop-file-utils-0.22
 %configure
 pushd src
 make desktop-file-validate V=1 DESKTOP_FILE_UTILS_LIBS="%{_libdir}/libglib-2.0.a -lpthread -lrt"
 popd
 
 %install
-cd ../desktop-file-utils-0.20
+cd ../desktop-file-utils-0.22
 pwd
 # test if the rpmlint works at all
 set +e
@@ -56,7 +57,7 @@ install -m 755 -D src/desktop-file-validate $RPM_BUILD_ROOT/opt/testing/bin/desk
 cp -a /usr/share/rpmlint/*.py $RPM_BUILD_ROOT/opt/testing/share/rpmlint
 # install config files
 install -d -m 755 $RPM_BUILD_ROOT/opt/testing/share/rpmlint/mini
-for i in /etc/rpmlint/{licenses,rpmgroups,pie}.config; do
+for i in /etc/rpmlint/{licenses,rpmgroups,pie}.config "%{SOURCE103}"; do
   cp $i $RPM_BUILD_ROOT/opt/testing/share/rpmlint/mini
 done
 install -m 644 -D /usr/share/rpmlint/config $RPM_BUILD_ROOT/opt/testing/share/rpmlint/config
@@ -68,7 +69,10 @@ install -m 644 -D /usr/include/python%{py_ver}/pyconfig.h $RPM_BUILD_ROOT/opt/te
 #
 cd %{py_libdir}
 for f in $(<%{SOURCE100}); do
-  echo $f
+  find -path "*/$f" -exec install -D {} $RPM_BUILD_ROOT/opt/testing/%{_lib}/python%{py_ver}/{} \;
+done
+cd /usr/lib/python%{py_ver}
+for f in $(<%{SOURCE100}); do
   find -path "*/$f" -exec install -D {} $RPM_BUILD_ROOT/opt/testing/%{_lib}/python%{py_ver}/{} \;
 done
 install -m 644 /usr/lib/python%{py_ver}/site-packages/magic.py $RPM_BUILD_ROOT/opt/testing/%{_lib}/python%{py_ver}/site-packages/magic.py
@@ -81,8 +85,8 @@ PYTHONOPTIMIZE=1 python %py_libdir/py_compile.py *.py
 rm *.py
 popd
 pushd $RPM_BUILD_ROOT/opt/testing/%{_lib}/python%{py_ver}/site-packages/
-PYTHONOPTIMIZE=1 python %py_libdir/py_compile.py *.py
-rm *.py
+PYTHONOPTIMIZE=1 find -name \*.py -exec python %py_libdir/py_compile.py {} \;
+find -name \*.py -delete
 popd
 rm -rf $RPM_BUILD_ROOT/{usr,etc}
 rm -f $RPM_BUILD_ROOT/opt/testing/bin/rpmlint
