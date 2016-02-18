@@ -39,7 +39,6 @@ cp %{SOURCE1001} .
 
 %build
 #cd ../desktop-file-utils-0.22
-#%configure
 #pushd src
 #make desktop-file-validate V=1 DESKTOP_FILE_UTILS_LIBS="%{_libdir}/libglib-2.0.a -lpthread -lrt"
 #popd
