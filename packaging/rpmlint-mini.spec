@@ -19,7 +19,7 @@ Version:        1.5
 Release:        0
 Url:            http://rpmlint.zarb.org/
 Source:         %{name}-%{version}.tar.bz2
-Source99:       desktop-file-utils-0.22.tar.xz
+#Source99:       desktop-file-utils-0.22.tar.xz
 Source100:      rpmlint-deps.txt
 Source101:      rpmlint.wrapper
 Source102:      rpmlint-mini.config
@@ -32,19 +32,31 @@ Rpmlint is a tool to check common errors on rpm packages. Binary and
 source packages can be checked.
 
 %prep
-%setup -q  -b 99
+#%setup -q  -b 99
+%setup -q
 cp %{SOURCE1001} .
-cd ../desktop-file-utils-0.22
+#cd ../desktop-file-utils-0.22
 
 %build
-cd ../desktop-file-utils-0.22
-%configure
-pushd src
-make desktop-file-validate V=1 DESKTOP_FILE_UTILS_LIBS="%{_libdir}/libglib-2.0.a -lpthread -lrt"
-popd
+#cd ../desktop-file-utils-0.22
+#pushd src
+#make desktop-file-validate V=1 DESKTOP_FILE_UTILS_LIBS="%{_libdir}/libglib-2.0.a -lpthread -lrt"
+#popd
 
 %install
-cd ../desktop-file-utils-0.22
+%ifarch armv7l
+%define ARCH armv7l
+%endif
+%ifarch %ix86
+%define ARCH i586
+%endif
+%ifarch x86_64
+%define ARCH x86_64
+%endif
+%ifarch aarch64
+%define ARCH aarch64
+%endif
+#cd ../desktop-file-utils-0.22
 pwd
 # test if the rpmlint works at all
 set +e
@@ -53,7 +65,7 @@ test $? -gt 0 -a $? -lt 60 && exit 1
 set -e
 # okay, lets put it together
 mkdir -p $RPM_BUILD_ROOT/opt/testing/share/rpmlint
-install -m 755 -D src/desktop-file-validate $RPM_BUILD_ROOT/opt/testing/bin/desktop-file-validate
+install -m 755 -D src/%{ARCH}/desktop-file-validate $RPM_BUILD_ROOT/opt/testing/bin/desktop-file-validate
 cp -a /usr/share/rpmlint/*.py $RPM_BUILD_ROOT/opt/testing/share/rpmlint
 # install config files
 install -d -m 755 $RPM_BUILD_ROOT/opt/testing/share/rpmlint/mini
