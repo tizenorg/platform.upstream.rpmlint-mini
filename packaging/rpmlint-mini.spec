@@ -1,6 +1,6 @@
 Name:           rpmlint-mini
-BuildRequires:  glib2-devel
-BuildRequires:  glib2-devel-static
+#BuildRequires:  glib2-devel
+#BuildRequires:  glib2-devel-static
 BuildRequires:  pkg-config
 BuildRequires:  python-magic
 BuildRequires:  python-xml
