@@ -38,6 +38,9 @@ cp %{SOURCE1001} .
 #cd ../desktop-file-utils-0.22
 
 %build
+export CFLAGS+=" -fvisibility=hidden"
+  export CXXFLAGS+=" -fvisibility=hidden"
+  
 #cd ../desktop-file-utils-0.22
 #pushd src
 #make desktop-file-validate V=1 DESKTOP_FILE_UTILS_LIBS="%{_libdir}/libglib-2.0.a -lpthread -lrt"
