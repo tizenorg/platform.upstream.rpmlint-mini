@@ -56,6 +56,9 @@ cp %{SOURCE1001} .
 %ifarch aarch64
 %define ARCH aarch64
 %endif
+%ifarch mips
+%define ARCH mips
+%endif
 #cd ../desktop-file-utils-0.22
 pwd
 # test if the rpmlint works at all
